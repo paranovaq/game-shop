@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const Table = ({ clients, delClient }) => {
+const Table = ({ games, deleteGame }) => {
   return (
     <Paper
       elevation={4}
@@ -25,31 +25,33 @@ const Table = ({ clients, delClient }) => {
         variant="h5"
         sx={{ p: 2, fontWeight: "bold", backgroundColor: "#1976d2", color: "#fff" }}
       >
-        Client List
+        🎯 Game Store Catalog
       </Typography>
       <TableContainer>
         <MuiTable>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f0f4ff" }}>
-              <TableCell><strong>Name</strong></TableCell>
-              <TableCell><strong>Surname</strong></TableCell>
-              <TableCell><strong>Phone</strong></TableCell>
+              <TableCell><strong>Title</strong></TableCell>
+              <TableCell><strong>Genre</strong></TableCell>
+              <TableCell><strong>Release Date</strong></TableCell>
+              <TableCell><strong>Developer</strong></TableCell>
               <TableCell><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {clients.map((client, index) => (
+            {games.map((game, index) => (
               <TableRow key={index} hover>
-                <TableCell>{client.name}</TableCell>
-                <TableCell>{client.surname}</TableCell>
-                <TableCell>{client.phone}</TableCell>
+                <TableCell><strong>{game.title}</strong></TableCell>
+                <TableCell>{game.genre}</TableCell>
+                <TableCell>{game.releaseDate}</TableCell>
+                <TableCell>{game.developer}</TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
                     color="warning"
-                    onClick={() => delClient(client.id)}
+                    onClick={() => deleteGame(game.id)}
                   >
-                     Delete
+                    🗑️ Delete
                   </Button>
                 </TableCell>
               </TableRow>

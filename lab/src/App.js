@@ -1,46 +1,55 @@
 import './App.css';
-import ClientAPI from "./api/services";
+import GameAPI from "./api/services";
 import Table from "./Table";
 import Form from "./Form";
 import { useState, useEffect } from "react";
 
-const LOCAL_STORAGE_KEY = "clientList";
+const LOCAL_STORAGE_KEY = "gameStore";
 
 function App() {
-  const [clients, setClients] = useState([]);
+  const [games, setGames] = useState([]);
 
   useEffect(() => {
-    const storedClients = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (storedClients) {
-      setClients(JSON.parse(storedClients));
+    const storedGames = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (storedGames) {
+      setGames(JSON.parse(storedGames));
     } else {
-      const initialClients = ClientAPI.all();
-      setClients(initialClients);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialClients));
+      const initialGames = GameAPI.all();
+      setGames(initialGames);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialGames));
     }
   }, []);
 
-  const delCli = (id) => {
-    if (ClientAPI.delete(id)) {
-      const updatedClients = clients.filter((client) => client.id !== id);
-      setClients(updatedClients);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedClients));
+  const deleteGame = (id) => {
+    if (GameAPI.delete(id)) {
+      const updatedGames = games.filter((game) => game.id !== id);
+      setGames(updatedGames);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedGames));
     }
   };
 
-  const addClient = (client) => {
-    const newClient = ClientAPI.add(client);
-    if (newClient) {
-      const updatedClients = [...clients, newClient];
-      setClients(updatedClients);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedClients));
+  const addGame = (game) => {
+    const newGame = GameAPI.add(game);
+    if (newGame) {
+      const updatedGames = [...games, newGame];
+      setGames(updatedGames);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedGames));
     }
+  };
+
+  // Функция для обработки покупки (можно расширить логикой)
+  const handlePurchase = (gameId) => {
+    console.log(`Game ${gameId} purchased`);
+    // Здесь можно добавить логику обработки покупки
+    // Например, отправка на сервер, обновление состояния и т.д.
   };
 
   return (
-    <div className="App">
-      <Form handleSubmit={addClient} inClient={{ name: "", surname: "", phone: "" }} />
-      <Table clients={clients} delClient={delCli} />
+    <div className="App" style={{ padding: '20px', backgroundColor: '#f5f6fa', minHeight: '100vh' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <Form handleSubmit={addGame} initialGame={{ title: "", genre: "", releaseDate: "", developer: "" }} />
+        <Table games={games} deleteGame={deleteGame} onPurchase={handlePurchase} />
+      </div>
     </div>
   );
 }
