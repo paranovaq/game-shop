@@ -22,7 +22,7 @@ const Form = ({ handleSubmit, initialGame }) => {
   const onSubmit = (event) => {
     event.preventDefault();
     handleSubmit(game);
-    setGame(initialGame);
+    setGame(initialGame); // Это очистит все поля, включая price
   };
 
   const genres = [

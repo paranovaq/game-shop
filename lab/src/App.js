@@ -47,7 +47,7 @@ function App() {
   return (
     <div className="App" style={{ padding: '20px', backgroundColor: '#f5f6fa', minHeight: '100vh' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <Form handleSubmit={addGame} initialGame={{ title: "", genre: "", releaseDate: "", developer: "" }} />
+        <Form handleSubmit={addGame} initialGame={{ title: "", genre: "", releaseDate: "", developer: "", price: "" }} />
         <Table games={games} deleteGame={deleteGame} onPurchase={handlePurchase} />
       </div>
     </div>
