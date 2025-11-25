@@ -29,6 +29,7 @@ const Form = ({ handleSubmit, initialGame }) => {
     "RPG",
     "Action RPG",
     "Action",
+    "Action-adventure",
     "Adventure",
     "Shooter",
     "Strategy",
@@ -38,7 +39,8 @@ const Form = ({ handleSubmit, initialGame }) => {
     "Simulation",
     "Puzzle",
     "MMO",
-    "Indie"
+    "Indie",
+    "FMV"
   ];
 
   return (

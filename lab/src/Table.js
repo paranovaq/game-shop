@@ -13,9 +13,10 @@ import {
   Chip,
 } from "@mui/material";
 
-const Table = ({ games, deleteGame }) => {
+const Table = ({ games, deleteGame, onAddToCart, userRole }) => {
   const handleBuy = (game) => {
-    alert(`🎉 Thank you for your purchase!\n\nGame: "${game.title}"\nDeveloper: ${game.developer}\nGenre: ${game.genre}\nPrice: $${game.price}\n\nEnjoy your game! 🎮`);
+    onAddToCart(game);
+    alert(`"${game.title}" added to cart! 🛒`);
   };
 
   const getGenreColor = (genre) => {
@@ -119,20 +120,22 @@ const Table = ({ games, deleteGame }) => {
                         background: 'linear-gradient(45deg, #00b894, #00a085)'
                       }}
                     >
-                      Buy
+                      Add to Cart
                     </Button>
-                    <Button
-                      variant="contained"
-                      color="warning"
-                      onClick={() => deleteGame(game.id)}
-                      startIcon="🗑️"
-                      sx={{ 
-                        minWidth: '100px',
-                        fontWeight: 'bold'
-                      }}
-                    >
-                      Delete
-                    </Button>
+                    {userRole === 'admin' && (
+                      <Button
+                        variant="contained"
+                        color="warning"
+                        onClick={() => deleteGame(game.id)}
+                        startIcon="🗑️"
+                        sx={{ 
+                          minWidth: '100px',
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    )}
                   </Box>
                 </TableCell>
               </TableRow>
