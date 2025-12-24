@@ -65,7 +65,14 @@ function MainPage({ user, games, cart, deleteGame, addGame, addToCart, logout, d
       </div>
 
       {user.role === 'admin' && (
-        <Form handleSubmit={addGame} initialGame={{ title: "", genre: "", releaseDate: "", developer: "", price: "" }} />
+        <Form handleSubmit={addGame} initialGame={{ 
+          title: "", 
+          genre: "", 
+          releaseDate: "", 
+          developer: "", 
+          price: "", 
+          stock: 0 
+        }} />
       )}
       
       <Table 
@@ -73,13 +80,14 @@ function MainPage({ user, games, cart, deleteGame, addGame, addToCart, logout, d
         deleteGame={user.role === 'admin' ? deleteGame : null} 
         onAddToCart={addToCart}
         userRole={user.role}
+        cart={cart}
       />
     </>
   );
 }
 
 // Создаем отдельный компонент для корзины
-function CartPage({ cart, onRemove, onUpdateQuantity, onCheckout, getTotalPrice, user, darkMode, toggleTheme }) {
+function CartPage({ cart, onRemove, onUpdateQuantity, onCheckout, getTotalPrice, user, darkMode, toggleTheme, games }) {
   const navigate = useNavigate();
 
   return (
@@ -125,6 +133,7 @@ function CartPage({ cart, onRemove, onUpdateQuantity, onCheckout, getTotalPrice,
         onContinueShopping={() => navigate('/')}
         getTotalPrice={getTotalPrice}
         user={user}
+        games={games}
       />
     </>
   );
@@ -156,8 +165,8 @@ function App() {
             dark: darkMode ? '#bf5f82' : '#9a0036',
           },
           background: {
-            default: darkMode ? '#2d3748' : '#f5f6fa', // Серый вместо черного
-            paper: darkMode ? '#374151' : '#ffffff',   // Серый вместо черного
+            default: darkMode ? '#2d3748' : '#f5f6fa',
+            paper: darkMode ? '#374151' : '#ffffff',
           },
           text: {
             primary: darkMode ? '#f7fafc' : '#1a202c',
@@ -266,11 +275,22 @@ function App() {
       const updatedGames = games.filter((game) => game.id !== id);
       setGames(updatedGames);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedGames));
+      
+      const updatedCart = cart.filter(item => item.id !== id);
+      if (updatedCart.length !== cart.length) {
+        setCart(updatedCart);
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updatedCart));
+      }
     }
   };
 
   const addGame = (game) => {
-    const newGame = GameAPI.add(game);
+    const gameWithStock = {
+      ...game,
+      stock: parseInt(game.stock) || 0
+    };
+    
+    const newGame = GameAPI.add(gameWithStock);
     if (newGame) {
       const updatedGames = [...games, newGame];
       setGames(updatedGames);
@@ -279,10 +299,24 @@ function App() {
   };
 
   const addToCart = (game) => {
-    const existingItem = cart.find(item => item.id === game.id);
+    const gameInStock = games.find(g => g.id === game.id);
+    
+    if (!gameInStock) {
+      alert("Game not found!");
+      return;
+    }
+    
+    const cartItem = cart.find(item => item.id === game.id);
+    const currentCartQuantity = cartItem ? cartItem.quantity : 0;
+    
+    if (currentCartQuantity >= gameInStock.stock) {
+      alert(`Sorry! Only ${gameInStock.stock} copies available in stock.`);
+      return;
+    }
+    
     let updatedCart;
 
-    if (existingItem) {
+    if (cartItem) {
       updatedCart = cart.map(item =>
         item.id === game.id ? { ...item, quantity: item.quantity + 1 } : item
       );
@@ -292,6 +326,7 @@ function App() {
 
     setCart(updatedCart);
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updatedCart));
+    alert(`"${game.title}" added to cart! 🛒 (${currentCartQuantity + 1}/${gameInStock.stock})`);
   };
 
   const removeFromCart = (id) => {
@@ -303,6 +338,13 @@ function App() {
   const updateCartQuantity = (id, quantity) => {
     if (quantity <= 0) {
       removeFromCart(id);
+      return;
+    }
+    
+    const gameInStock = games.find(g => g.id === id);
+    
+    if (gameInStock && quantity > gameInStock.stock) {
+      alert(`Sorry! Only ${gameInStock.stock} copies available in stock.`);
       return;
     }
 
@@ -319,6 +361,34 @@ function App() {
   };
 
   const checkout = () => {
+    for (const item of cart) {
+      const gameInStock = games.find(g => g.id === item.id);
+      if (!gameInStock) {
+        alert(`"${item.title}" is no longer available!`);
+        removeFromCart(item.id);
+        return;
+      }
+      
+      if (item.quantity > gameInStock.stock) {
+        alert(`Sorry! Only ${gameInStock.stock} copies of "${item.title}" available in stock.`);
+        return;
+      }
+    }
+    
+    const updatedGames = games.map(game => {
+      const cartItemFound = cart.find(item => item.id === game.id);
+      if (cartItemFound) {
+        return {
+          ...game,
+          stock: game.stock - cartItemFound.quantity
+        };
+      }
+      return game;
+    });
+    
+    setGames(updatedGames);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedGames));
+    
     alert(`🎉 Order completed!\n\nTotal: $${getTotalPrice()}\n\nThank you for your purchase!`);
     clearCart();
   };
@@ -376,6 +446,7 @@ function App() {
                     user={user}
                     darkMode={darkMode}
                     toggleTheme={toggleTheme}
+                    games={games}
                   />
                 ) : (
                   <Navigate to="/login" />

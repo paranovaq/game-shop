@@ -18,7 +18,7 @@ const Form = ({ handleSubmit, initialGame }) => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setGame({ ...game, [name]: value });
+    setGame({ ...game, [name]: name === 'stock' || name === 'price' ? (parseFloat(value) || 0) : value });
   };
 
   const onSubmit = (event) => {
@@ -56,13 +56,13 @@ const Form = ({ handleSubmit, initialGame }) => {
   const inputTextColor = theme.palette.mode === 'dark' ? 'white' : '#2d3748';
   const labelColor = theme.palette.mode === 'dark' 
     ? 'rgba(255, 255, 255, 0.9)' 
-    : '#ffffff'; // Белый текст для лучшей видимости на градиенте
+    : '#462020ff';
 
   return (
     <Paper
       elevation={4}
       sx={{
-        p: 4,
+        p: 3,
         mb: 4,
         borderRadius: 3,
         background: gradient,
@@ -91,7 +91,8 @@ const Form = ({ handleSubmit, initialGame }) => {
           color: 'white',
           position: 'relative',
           zIndex: 2,
-          textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+          textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+          mb: 2
         }}
       >
         🎮 Add New Game
@@ -103,8 +104,9 @@ const Form = ({ handleSubmit, initialGame }) => {
         zIndex: 2 
       }} />
       <Box component="form" onSubmit={onSubmit} sx={{ position: 'relative', zIndex: 2 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
+        <Grid container spacing={2} alignItems="center">
+          {/* Game Title */}
+          <Grid item xs={12} sm={2.3}>
             <TextField
               fullWidth
               label="Game Title"
@@ -112,12 +114,12 @@ const Form = ({ handleSubmit, initialGame }) => {
               value={game.title}
               onChange={handleChange}
               variant="filled"
-              size="medium"
+              size="small"
               required
               InputProps={{
                 sx: { 
                   backgroundColor: inputBackground,
-                  borderRadius: 2,
+                  borderRadius: 1.5,
                   color: inputTextColor,
                   fontWeight: 500,
                   '&:hover': {
@@ -129,7 +131,7 @@ const Form = ({ handleSubmit, initialGame }) => {
                   '&.Mui-focused': {
                     backgroundColor: theme.palette.mode === 'dark' 
                       ? 'rgba(255, 255, 255, 0.2)' 
-                      : 'rgba(255, 255, 255, 1)',
+                      : 'rgba(255, 255, 255, 0.6)',
                     boxShadow: '0 0 0 2px rgba(102, 126, 234, 0.5)',
                   },
                   transition: 'all 0.3s ease'
@@ -139,7 +141,7 @@ const Form = ({ handleSubmit, initialGame }) => {
                 sx: { 
                   color: labelColor,
                   fontWeight: 600,
-                  fontSize: '1rem',
+                  fontSize: '0.9rem',
                   '&.Mui-focused': {
                     color: '#ffffff',
                     fontWeight: 700,
@@ -148,7 +150,9 @@ const Form = ({ handleSubmit, initialGame }) => {
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+
+          {/* Genre */}
+          <Grid item xs={12} sm={1.7}>
             <TextField
               fullWidth
               select
@@ -157,12 +161,12 @@ const Form = ({ handleSubmit, initialGame }) => {
               value={game.genre}
               onChange={handleChange}
               variant="filled"
-              size="medium"
+              size="small"
               required
               InputProps={{
                 sx: { 
                   backgroundColor: inputBackground,
-                  borderRadius: 2,
+                  borderRadius: 1.5,
                   color: inputTextColor,
                   fontWeight: 500,
                   '&:hover': {
@@ -174,7 +178,7 @@ const Form = ({ handleSubmit, initialGame }) => {
                   '&.Mui-focused': {
                     backgroundColor: theme.palette.mode === 'dark' 
                       ? 'rgba(255, 255, 255, 0.2)' 
-                      : 'rgba(255, 255, 255, 1)',
+                      : 'rgba(255, 255, 255, 0.6)',
                     boxShadow: '0 0 0 2px rgba(102, 126, 234, 0.5)',
                   },
                   transition: 'all 0.3s ease'
@@ -184,7 +188,7 @@ const Form = ({ handleSubmit, initialGame }) => {
                 sx: { 
                   color: labelColor,
                   fontWeight: 600,
-                  fontSize: '1rem',
+                  fontSize: '0.9rem',
                   '&.Mui-focused': {
                     color: '#ffffff',
                     fontWeight: 700,
@@ -217,7 +221,57 @@ const Form = ({ handleSubmit, initialGame }) => {
               ))}
             </TextField>
           </Grid>
-          <Grid item xs={12} sm={4}>
+
+          {/* Stock Quantity */}
+          <Grid item xs={12} sm={1.4}>
+            <TextField
+              fullWidth
+              label="Stock"
+              name="stock"
+              type="number"
+              value={game.stock || 0}
+              onChange={handleChange}
+              variant="filled"
+              size="small"
+              InputProps={{
+                sx: { 
+                  backgroundColor: inputBackground,
+                  borderRadius: 1.5,
+                  color: inputTextColor,
+                  fontWeight: 500,
+                  '&:hover': {
+                    backgroundColor: theme.palette.mode === 'dark' 
+                      ? 'rgba(255, 255, 255, 0.15)' 
+                      : 'rgba(255, 255, 255, 1)',
+                    boxShadow: '0 0 0 2px rgba(102, 126, 234, 0.3)',
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: theme.palette.mode === 'dark' 
+                      ? 'rgba(255, 255, 255, 0.2)' 
+                      : 'rgba(255, 255, 255, 0.6)',
+                    boxShadow: '0 0 0 2px rgba(102, 126, 234, 0.5)',
+                  },
+                  transition: 'all 0.3s ease'
+                }
+              }}
+              InputLabelProps={{
+                sx: { 
+                  color: labelColor,
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                  '&.Mui-focused': {
+                    color: '#ffffff',
+                    fontWeight: 700,
+                  }
+                }
+              }}
+              required
+              inputProps={{ min: 0 }}
+            />
+          </Grid>
+
+          {/* Release Date */}
+          <Grid item xs={12} sm={1.6}>
             <TextField
               fullWidth
               label="Release Date"
@@ -226,13 +280,13 @@ const Form = ({ handleSubmit, initialGame }) => {
               value={game.releaseDate}
               onChange={handleChange}
               variant="filled"
-              size="medium"
+              size="small"
               InputLabelProps={{ 
                 shrink: true,
                 sx: { 
                   color: labelColor,
                   fontWeight: 600,
-                  fontSize: '1rem',
+                  fontSize: '0.9rem',
                   '&.Mui-focused': {
                     color: '#ffffff',
                     fontWeight: 700,
@@ -242,7 +296,7 @@ const Form = ({ handleSubmit, initialGame }) => {
               InputProps={{
                 sx: { 
                   backgroundColor: inputBackground,
-                  borderRadius: 2,
+                  borderRadius: 1.5,
                   color: inputTextColor,
                   fontWeight: 500,
                   '&:hover': {
@@ -254,7 +308,7 @@ const Form = ({ handleSubmit, initialGame }) => {
                   '&.Mui-focused': {
                     backgroundColor: theme.palette.mode === 'dark' 
                       ? 'rgba(255, 255, 255, 0.2)' 
-                      : 'rgba(255, 255, 255, 1)',
+                      : 'rgba(255, 255, 255, 0.6)',
                     boxShadow: '0 0 0 2px rgba(102, 126, 234, 0.5)',
                   },
                   transition: 'all 0.3s ease'
@@ -263,7 +317,9 @@ const Form = ({ handleSubmit, initialGame }) => {
               required
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+
+          {/* Developer */}
+          <Grid item xs={12} sm={1.6}>
             <TextField
               fullWidth
               label="Developer"
@@ -271,12 +327,12 @@ const Form = ({ handleSubmit, initialGame }) => {
               value={game.developer}
               onChange={handleChange}
               variant="filled"
-              size="medium"
+              size="small"
               required
               InputProps={{
                 sx: { 
                   backgroundColor: inputBackground,
-                  borderRadius: 2,
+                  borderRadius: 1.5,
                   color: inputTextColor,
                   fontWeight: 500,
                   '&:hover': {
@@ -288,7 +344,7 @@ const Form = ({ handleSubmit, initialGame }) => {
                   '&.Mui-focused': {
                     backgroundColor: theme.palette.mode === 'dark' 
                       ? 'rgba(255, 255, 255, 0.2)' 
-                      : 'rgba(255, 255, 255, 1)',
+                      : 'rgba(255, 255, 255, 0.6)',
                     boxShadow: '0 0 0 2px rgba(102, 126, 234, 0.5)',
                   },
                   transition: 'all 0.3s ease'
@@ -298,7 +354,7 @@ const Form = ({ handleSubmit, initialGame }) => {
                 sx: { 
                   color: labelColor,
                   fontWeight: 600,
-                  fontSize: '1rem',
+                  fontSize: '0.9rem',
                   '&.Mui-focused': {
                     color: '#ffffff',
                     fontWeight: 700,
@@ -307,7 +363,9 @@ const Form = ({ handleSubmit, initialGame }) => {
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+
+          {/* Price */}
+          <Grid item xs={12} sm={1.4}>
             <TextField
               fullWidth
               label="Price"
@@ -316,12 +374,12 @@ const Form = ({ handleSubmit, initialGame }) => {
               value={game.price}
               onChange={handleChange}
               variant="filled"
-              size="medium"
+              size="small"
               InputProps={{
                 startAdornment: <InputAdornment position="start" sx={{ color: labelColor, fontWeight: 600 }}>$</InputAdornment>,
                 sx: { 
                   backgroundColor: inputBackground,
-                  borderRadius: 2,
+                  borderRadius: 1.5,
                   color: inputTextColor,
                   fontWeight: 500,
                   '&:hover': {
@@ -333,7 +391,7 @@ const Form = ({ handleSubmit, initialGame }) => {
                   '&.Mui-focused': {
                     backgroundColor: theme.palette.mode === 'dark' 
                       ? 'rgba(255, 255, 255, 0.2)' 
-                      : 'rgba(255, 255, 255, 1)',
+                      : 'rgba(255, 255, 255, 0.6)',
                     boxShadow: '0 0 0 2px rgba(102, 126, 234, 0.5)',
                   },
                   transition: 'all 0.3s ease'
@@ -343,7 +401,7 @@ const Form = ({ handleSubmit, initialGame }) => {
                 sx: { 
                   color: labelColor,
                   fontWeight: 600,
-                  fontSize: '1rem',
+                  fontSize: '0.9rem',
                   '&.Mui-focused': {
                     color: '#ffffff',
                     fontWeight: 700,
@@ -351,57 +409,66 @@ const Form = ({ handleSubmit, initialGame }) => {
                 }
               }}
               required
+              inputProps={{ min: 0, step: 0.01 }}
             />
           </Grid>
+
+          {/* Buttons */}
+          <Grid item xs={12} sm={2}>
+            <Box sx={{ display: 'flex', gap: 2, height: '100%' }}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="success"
+                fullWidth
+                sx={{ 
+                  py: 1.5,
+                  px: 10,  
+                  fontSize: "1.1rem", 
+                  fontWeight: "bold",
+                  background: 'linear-gradient(45deg, #00b894, #00a085)',
+                  borderRadius: 2,
+                  boxShadow: '0 4px 15px rgba(0, 184, 148, 0.3)',
+                  '&:hover': {
+                    background: 'linear-gradient(45deg, #00a085, #008b74)',
+                    boxShadow: '0 6px 20px rgba(0, 184, 148, 0.4)',
+                    transform: 'translateY(-2px)',
+                  },
+                  transition: 'all 0.3s ease',
+                  height: '56px' // Высота как у TextField
+                }}
+                startIcon="➕"
+              >
+                Add Game
+              </Button>
+              <Button
+                type="button"
+                variant="outlined"
+                fullWidth
+                sx={{ 
+                  py: 1.5,
+                  px: 10,  
+                  fontSize: "1.1rem", 
+                  fontWeight: "bold",
+                  borderColor: 'white',
+                  color: 'white',
+                  borderRadius: 2,
+                  '&:hover': {
+                    borderColor: 'white',
+                    backgroundColor: 'rgba(255,255,255,0.15)',
+                    boxShadow: '0 0 15px rgba(255,255,255,0.2)',
+                    transform: 'translateY(-2px)',
+                  },
+                  transition: 'all 0.3s ease',
+                  height: '56px' // Высота как у TextField
+                }}
+                onClick={() => setGame(initialGame)}
+              >
+                Clear
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
-        <Box sx={{ mt: 4, display: 'flex', gap: 2 }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="success"
-            fullWidth
-            sx={{ 
-              py: 1.5, 
-              fontSize: "1.1rem", 
-              fontWeight: "bold",
-              background: 'linear-gradient(45deg, #00b894, #00a085)',
-              borderRadius: 2,
-              boxShadow: '0 4px 15px rgba(0, 184, 148, 0.3)',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #00a085, #008b74)',
-                boxShadow: '0 6px 20px rgba(0, 184, 148, 0.4)',
-                transform: 'translateY(-2px)',
-              },
-              transition: 'all 0.3s ease',
-            }}
-            startIcon="➕"
-          >
-            Add Game
-          </Button>
-          <Button
-            type="button"
-            variant="outlined"
-            fullWidth
-            sx={{ 
-              py: 1.5, 
-              fontSize: "1.1rem", 
-              fontWeight: "bold",
-              borderColor: 'white',
-              color: 'white',
-              borderRadius: 2,
-              '&:hover': {
-                borderColor: 'white',
-                backgroundColor: 'rgba(255,255,255,0.15)',
-                boxShadow: '0 0 15px rgba(255,255,255,0.2)',
-                transform: 'translateY(-2px)',
-              },
-              transition: 'all 0.3s ease',
-            }}
-            onClick={() => setGame(initialGame)}
-          >
-            Clear
-          </Button>
-        </Box>
       </Box>
     </Paper>
   );

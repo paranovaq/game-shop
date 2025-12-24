@@ -20,6 +20,7 @@ const GameAPI = {
                 id: this.games.reduce((prev, current) => {
                     return prev.id > current.id ? prev : current;
                 }, { id: 0 }).id + 1,
+                stock: parseInt(game.stock) || 0 // Добавляем поле stock
             };
         }
         this.games = [...this.games, game];
