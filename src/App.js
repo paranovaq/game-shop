@@ -8,7 +8,6 @@ import { setOnlineStatus } from './store/slices/uiSlice';
 
 
 import Login from "./Login";
-import ThemeToggle from "./components/ThemeToggle";
 import MainPage from "./components/MainPage";
 import CartPage from "./components/CartPage";
 
@@ -155,7 +154,7 @@ function App() {
                 user ? <Navigate to="/" /> : 
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
-                    <ThemeToggle />
+      
                   </div>
                   <Login />
                 </div>

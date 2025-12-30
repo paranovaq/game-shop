@@ -1,9 +1,8 @@
-// src/api/axios.js
 import axios from 'axios';
 
 // Создаем базовый экземпляр axios с настройками
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3000/', // Замените на URL вашего API
+  baseURL: 'http://localhost:3000/', 
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

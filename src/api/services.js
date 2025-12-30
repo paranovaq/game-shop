@@ -1,4 +1,3 @@
-// src/api/services.js
 const LOCAL_STORAGE_KEY = "gameStoreGames";
 
 // Инициализируем игры из localStorage или используем начальные данные
