@@ -20,10 +20,11 @@ import { Add, Remove, Delete } from "@mui/icons-material";
 
 const Cart = ({ cart, onRemove, onUpdateQuantity, onCheckout, onContinueShopping, getTotalPrice, user, games }) => {
   const theme = useTheme();
+  
 
   const getAvailableStock = (gameId) => {
-    const game = games.find(g => g.id === gameId);
-    return game ? game.stock : 0;
+  const game = games.find(g => g.id === gameId);
+  return game ? game.stock : 0;
   };
 
   if (cart.length === 0) {

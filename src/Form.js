@@ -364,6 +364,8 @@ const Form = ({ handleSubmit, initialGame }) => {
             />
           </Grid>
 
+          
+
           {/* Price */}
           <Grid item xs={12} sm={1.4}>
             <TextField

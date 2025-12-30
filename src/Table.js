@@ -72,7 +72,7 @@ const Table = ({ games, deleteGame, onAddToCart, userRole, cart }) => {
           color: "#fff" 
         }}
       >
-        🎯 Game Store Catalog
+        🎯 Game Store Catalog ({games.length} games)
       </Typography>
       <TableContainer>
         <MuiTable>
@@ -94,10 +94,9 @@ const Table = ({ games, deleteGame, onAddToCart, userRole, cart }) => {
               const cartItem = cart.find(item => item.id === game.id);
               const availableInCart = cartItem ? game.stock - cartItem.quantity : game.stock;
               
-              // Переменная cartItem теперь используется в вычислении availableInCart
               return (
                 <TableRow 
-                  key={index} 
+                  key={game.id} 
                   hover 
                   sx={{ 
                     '&:hover': { backgroundColor: rowHoverColor },
@@ -160,7 +159,7 @@ const Table = ({ games, deleteGame, onAddToCart, userRole, cart }) => {
                         width: '120px'
                       }}
                     />
-                    {cartItem && (
+                    {cartItem && cartItem.quantity > 0 && (
                       <Typography 
                         variant="caption" 
                         sx={{ 
